@@ -8,7 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.SuperHero.R
+import com.example.superhero.R
 import com.example.superhero.adapters.SuperheroAdapter
 import com.example.superhero.data.Superhero
 import com.example.superhero.utils.SuperheroService

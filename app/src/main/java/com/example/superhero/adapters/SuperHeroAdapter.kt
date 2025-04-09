@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.SuperHero.R
+import com.example.superhero.R
 import com.example.superhero.data.Superhero
 
 import com.squareup.picasso.Picasso
