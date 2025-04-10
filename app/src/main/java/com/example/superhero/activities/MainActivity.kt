@@ -1,9 +1,13 @@
 package com.example.superhero.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.widget.SearchView.OnQueryTextListener
 
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,11 +39,36 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
 
-        adapter = SuperheroAdapter(superheroList)
+        adapter = SuperheroAdapter(superheroList) { position ->
+            val superhero = superheroList[position]
+
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(DetailActivity.SUPERHERO_ID, superhero.id)
+            startActivity(intent)
+        }
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         searchSuperheroes("a")
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.activity_main_menu, menu)
+
+        val menuItem = menu.findItem(R.id.menu_search)
+        val searchView = menuItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                searchSuperheroes(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+
+        return true
     }
 
     fun searchSuperheroes(query: String) {
