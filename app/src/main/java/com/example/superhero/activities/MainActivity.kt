@@ -2,12 +2,12 @@ package com.example.superhero.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
-import android.widget.SearchView.OnQueryTextListener
-
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.OnQueryTextListener
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,14 +15,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.superhero.R
 import com.example.superhero.adapters.SuperheroAdapter
 import com.example.superhero.data.Superhero
+import com.example.superhero.databinding.ActivityMainBinding
 import com.example.superhero.utils.SuperheroService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 class MainActivity : AppCompatActivity() {
 
-    lateinit var recyclerView: RecyclerView
+
+    lateinit var binding: ActivityMainBinding
+
     lateinit var adapter: SuperheroAdapter
 
     var superheroList: List<Superhero> = emptyList()
@@ -30,14 +32,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        recyclerView = findViewById(R.id.recyclerView)
 
         adapter = SuperheroAdapter(superheroList) { position ->
             val superhero = superheroList[position]
@@ -46,8 +49,8 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra(DetailActivity.SUPERHERO_ID, superhero.id)
             startActivity(intent)
         }
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         searchSuperheroes("a")
     }
@@ -57,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         val menuItem = menu.findItem(R.id.menu_search)
         val searchView = menuItem.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 searchSuperheroes(query)
                 return true

@@ -3,15 +3,15 @@ package com.example.superhero.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.superhero.R
 import com.example.superhero.data.Superhero
-
+import com.example.superhero.databinding.ItemSuperheroBinding
 import com.squareup.picasso.Picasso
+
 
 class SuperheroAdapter(
     var items: List<Superhero>,
@@ -19,8 +19,9 @@ class SuperheroAdapter(
 ): Adapter<SuperheroViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuperheroViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_superhero, parent, false)
-        return SuperheroViewHolder(view)
+        //val view = LayoutInflater.from(parent.context).inflate(R.layout.item_superhero, parent, false)
+        val binding = ItemSuperheroBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SuperheroViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -41,13 +42,10 @@ class SuperheroAdapter(
     }
 }
 
-class SuperheroViewHolder(view: View) : ViewHolder(view) {
-
-    var nameTextView: TextView = view.findViewById(R.id.nameTextView)
-    var avatarImageView: ImageView = view.findViewById(R.id.avatarImageView)
+class SuperheroViewHolder(val binding: ItemSuperheroBinding) : ViewHolder(binding.root) {
 
     fun render(superhero: Superhero) {
-        nameTextView.text = superhero.name
-        Picasso.get().load(superhero.image.url).into(avatarImageView)
+        binding.nameTextView.text = superhero.name
+        Picasso.get().load(superhero.image.url).into(binding.avatarImageView)
     }
 }
